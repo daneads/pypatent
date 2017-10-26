@@ -1,5 +1,6 @@
 # pypatent
 Search for and retrieve US Patent and Trademark Office Patent Data
+
 [PyPI page](https://pypi.python.org/pypi/pypatent)
 
 ## Requirements
