@@ -45,7 +45,7 @@ Search results are returned as a list of patent numbers, patent titles, and link
 [[patent_number_1, patent_title_1, patent_link_1], ..., [patent_number_n, patent_title_n, patent_link_n]]
 ```
 
-## Retrieving patent details: the patent class
+## Retrieving Patent Details: The patent Class
 Use the patent class to retrieve patent details for a given patent URL.
 
 ```python
@@ -54,75 +54,75 @@ this_patent = patent('http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2
 
 The following attributes are retrieved:
 
-patent_num: Patent Number
-patent_date: Issue Date
-abstract: Abstract
-inventors: List of Names of Inventors and Their Locations
-applicant_name: Applicant Name
-applicant_city: Applicant City
-applicant_state: Applicant State
-applicant_country: Applicant Country
-assignee_name: Assignee Name
-assignee_loc: Assignee Location
-family_id: Family ID
-applicant_num: Applicant Number
-file_date: Filing date
-claims: Claims Description (as a list)
-description: Patent Description (as a list)
+* patent_num: Patent Number
+* patent_date: Issue Date
+* abstract: Abstract
+* inventors: List of Names of Inventors and Their Locations
+* applicant_name: Applicant Name
+* applicant_city: Applicant City
+* applicant_state: Applicant State
+* applicant_country: Applicant Country
+* assignee_name: Assignee Name
+* assignee_loc: Assignee Location
+* family_id: Family ID
+* applicant_num: Applicant Number
+* file_date: Filing date
+* claims: Claims Description (as a list)
+* description: Patent Description (as a list)
 
-### Field Code Arguments
-PN: Patent Number
-ISD: Issue Date
-TTL: Title
-ABST: Abstract
-ACLM: Claim(s)
-SPEC: Description/Specification
-CCL: Current US Classification
-CPC: Current CPC Classification
-CPCL: Current CPC Classification Class
-ICL: International Classification
-APN: Application Serial Number
-APD: Application Date
-APT: Application Type
-GOVT: Government Interest
-FMID: Patent Family ID
-PARN: Parent Case Information
-RLAP: Related US App. Data
-RLFD: Related Application Filing Date
-PRIR: Foreign Priority
-PRAD: Priority Filing Date
-PCT: PCT Information
-PTAD: PCT Filing Date
-PT3D: PCT 371 Date
-PPPD: Prior Published Document Date
-REIS: Reissue Data
-RPAF Reissued Patent Application Filing Date
-AFFF: 130(b) Affirmation Flag
-AFFT: 130(b) Affirmation Statement
-IN: Inventor Name
-IC: Inventor City
-IS: Inventor State
-ICN: Inventor Country
-AANM: Applicant Name
-AACI: Applicant City
-AAST: Applicant State
-AACO: Applicant Country
-AAAT: Applicant Type
-LREP: Attorney or agent
-AN: Assignee Name
-AC: Assignee City
-AS: Assignee State
-ACN: Assignee Country
-EXP: Primary Examiner
-EXA: Assistant Examiner
-REF: Referenced By
-FREF: Foreign References
-OREF: Other References
-COFC: Certificate of Correction
-REEX: Re-Examination Certificate
-PTAB: PTAB Trial Certificate
-SEC: Supplemental Exam Certificate
-ILRN: International Registration Number
-ILRD: International Registration Date
-ILPD: International Registration Publication Date
-ILFD: Hague International Filing Date
+### Field Code Arguments for Search Function
+* PN: Patent Number
+* ISD: Issue Date
+* TTL: Title
+* ABST: Abstract
+* ACLM: Claim(s)
+* SPEC: Description/Specification
+* CCL: Current US Classification
+* CPC: Current CPC Classification
+* CPCL: Current CPC Classification Class
+* ICL: International Classification
+* APN: Application Serial Number
+* APD: Application Date
+* APT: Application Type
+* GOVT: Government Interest
+* FMID: Patent Family ID
+* PARN: Parent Case Information
+* RLAP: Related US App. Data
+* RLFD: Related Application Filing Date
+* PRIR: Foreign Priority
+* PRAD: Priority Filing Date
+* PCT: PCT Information
+* PTAD: PCT Filing Date
+* PT3D: PCT 371 Date
+* PPPD: Prior Published Document Date
+* REIS: Reissue Data
+* RPAF Reissued Patent Application Filing Date
+* AFFF: 130(b) Affirmation Flag
+* AFFT: 130(b) Affirmation Statement
+* IN: Inventor Name
+* IC: Inventor City
+* IS: Inventor State
+* ICN: Inventor Country
+* AANM: Applicant Name
+* AACI: Applicant City
+* AAST: Applicant State
+* AACO: Applicant Country
+* AAAT: Applicant Type
+* LREP: Attorney or agent
+* AN: Assignee Name
+* AC: Assignee City
+* AS: Assignee State
+* ACN: Assignee Country
+* EXP: Primary Examiner
+* EXA: Assistant Examiner
+* REF: Referenced By
+* FREF: Foreign References
+* OREF: Other References
+* COFC: Certificate of Correction
+* REEX: Re-Examination Certificate
+* PTAB: PTAB Trial Certificate
+* SEC: Supplemental Exam Certificate
+* ILRN: International Registration Number
+* ILRD: International Registration Date
+* ILPD: International Registration Publication Date
+* ILFD: Hague International Filing Date
