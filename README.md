@@ -1,8 +1,15 @@
 # pypatent
 Search for and retrieve US Patent and Trademark Office Patent Data
+[PyPI page](https://pypi.python.org/pypi/pypatent)
 
 ## Requirements
 Python 3, BeautifulSoup, requests, re
+
+## Installation
+
+```
+pip install pypatent
+```
 
 ## Searching for Patents
 The search function works similarly to the [Advanced Search at the USPTO](http://patft.uspto.gov/netahtml/PTO/search-adv.htm)
