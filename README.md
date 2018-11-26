@@ -1,10 +1,19 @@
 # pypatent
-Search for and retrieve US Patent and Trademark Office Patent Data
+
+pypatent is a tiny Python package to easily search for and scrape US Patent and Trademark Office Patent Data.
 
 [PyPI page](https://pypi.python.org/pypi/pypatent)
 
+*New in version 1.1:*
+
+This version makes searching and storing patent data easier:
+* Simplified to 2 objects: `Search` and `Patent`
+* A `Search` object searches the USPTO site and can output the results as a DataFrame or list. It can scrape the details of each patent, or just get the patent title and URL. Most users will only need to use this object.
+* A `Patent` object fetches and holds a single patent's info. Fetching the patent's details is now optional. This object should only be used when you already have the patent URL and aren't conducting a search.
+
 ## Requirements
-Python 3, BeautifulSoup, requests, re
+
+Python 3, BeautifulSoup, requests, pandas, re
 
 ## Installation
 
@@ -12,55 +21,103 @@ Python 3, BeautifulSoup, requests, re
 pip install pypatent
 ```
 
-## Searching for Patents
-The search function works similarly to the [Advanced Search at the USPTO](http://patft.uspto.gov/netahtml/PTO/search-adv.htm)
+## Searching for patents
 
+The Search object works similarly to the [Advanced Search at the USPTO](http://patft.uspto.gov/netahtml/PTO/search-adv.htm), with additional options.
+
+### Specifying patent criteria for your search
+
+There are two methods to specify your search criteria, and you can use one or both.
+
+#### Search Method 1: Using a custom string
+
+You may search for a certain string in all fields of the patent:
 ```python
-def search(string=None, results_limit=50, pn=None, isd=None, ttl=None, abst=None, aclm=None, spec=None, ccl=None, cpc=None, cpcl=None, icl=None, apn=None, apd=None, apt=None, govt=None, fmid=None, parn=None, rlap=None, rlfd=None, prir=None, prad=None, pct=None, ptad=None, pt3d=None, pppd=None, reis=None, rpaf=None, afff=None, afft=None, in_=None, ic=None, is_=None, icn=None, aanm=None, aaci=None, aast=None, aaco=None, aaat=None, lrep=None, an=None, ac=None, as_=None, acn=None, exp=None, exa=None, ref=None, fref=None, oref=None, cofc=None, reex=None, ptab=None, sec=None, ilrn=None, ilrd=None, ilpd=None, ilfd=None)
+pypatent.Search('microsoft') # Will return results matching 'microsoft' in any field
 ```
 
-You may specify just the string argument to search for a certain string in all fields. For example:
-
+You may also specify complex search criteria as demonstrated on the [USPTO site](http://patft.uspto.gov/netahtml/PTO/help/helpadv.htm):
 ```python
-search('microsoft') # Will return results matching 'microsoft' in any field
-```
-You may also use the string argument to specify complex search criteria as demonstrated on the [USPTO site](http://patft.uspto.gov/netahtml/PTO/help/helpadv.htm). For example:
-
-```python
-search('TTL/(tennis AND (racquet OR racket))')
+pypatent.Search('TTL/(tennis AND (racquet OR racket))')
 ```
 
-Alternatively (or in conjunction with the string criteria as described below), you can specify one or more Field Code arguments to search within the specified fields. Multiple Field Code arguments will create a search with AND logic. OR logic can be used within a single argument. For more complex logic, use a custom string.
+#### Search Method 2: Specify USPTO search fields (see Field Codes below)
 
+Alternatively, you can specify one or more Field Code arguments to search within the specified fields. Multiple Field Code arguments will create a search with AND logic. OR logic can be used within a single argument. For more complex logic, use a custom string.
 ```python
-search(pn='adobe', ttl='software') # Equivalent to search('PN/adobe AND TTL/software')
-search(pn=('adobe or macromedia'), ttl='software') # Equivalent to search('PN/(adobe or macromedia) AND TTL/software')
+pypatent.Search(pn='adobe', ttl='software') # Equivalent to search('PN/adobe AND TTL/software')
+pypatent.Search(pn=('adobe or macromedia'), ttl='software') # Equivalent to search('PN/(adobe or macromedia) AND TTL/software')
 ```
+
+#### Combining search methods 1 and 2
 
 String criteria can be used in conjunction with Field Code arguments:
-
 ```python
-search('acrobat', pn='adobe', ttl='software') # Equivalent to search('acrobat AND PN/adobe AND TTL/software')
+pypatent.Search('acrobat', pn='adobe', ttl='software') # Equivalent to search('acrobat AND PN/adobe AND TTL/software')
 ```
 
 The Field Code arguments have the same meaning as on the [USPTO site](http://patft.uspto.gov/netahtml/PTO/search-adv.htm).
 
+### Additional search options
+
+#### Limit the number of results
+
 The `results_limit` argument lets you change how many patent results are retrieved. The default is 50, equivalent to one page of results.
 
-Search results are returned as a list of patent numbers, patent titles, and links:
-
 ```python
-[[patent_number_1, patent_title_1, patent_link_1], ..., [patent_number_n, patent_title_n, patent_link_n]]
+pypatent.Search('microsoft', results_limit=10) # Fetch 10 results only
 ```
 
-## Retrieving Patent Details: The patent Class
-Use the patent class to retrieve patent details for a given patent URL.
+#### Specify whether to fetch details for each patent
+
+By default, pypatent retrieves the details of every patent by visiting each patent's URL from the search results.
+This can take a long time since each page has to be scraped.
+If you just need the patent titles and URLs from the search results, set `get_patent_details` to `False`:
 
 ```python
-this_patent = patent('http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&u=%2Fnetahtml%2FPTO%2Fsearch-adv.htm&r=4&p=1&f=G&l=50&d=PTXT&S1=aaa&OS=aaa&RS=aaa')
+pypatent.Search('microsoft', get_patent_details=False) # Fetch patent numbers and titles only
 ```
 
-The following attributes are retrieved:
+### Formatting your search results
+
+pypatent has convenience methods to format the Search object into either a Pandas DataFrame or list of dicts.
+
+#### Format as Pandas DataFrame:
+```python
+pypatent.Search('microsoft').as_dataframe()
+```
+
+#### Format as list of dicts:
+```python
+pypatent.Search('microsoft', get_patent_details=False).as_list()
+```
+
+Sample result (without patent details):
+```
+[{
+     'title': 'Electronic device',
+      'url': 'http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&u=%2Fnetahtml%2FPTO%2Fsearch-adv.htm&r=1&p=1&f=G&l=50&d=PTXT&S1=microsoft&OS=microsoft&RS=microsoft'
+ },
+ 
+ {'title': 'Portable electric device', ... }
+```
+
+## The Patent class
+The `Search` class uses the `Patent` class to retrieve and store patent details for a given patent URL.
+You can use it directly if you already know the patent URL (e.g. you ran a Search with `get_patent_details=False`)
+
+```python
+# Create a Patent object
+this_patent = pypatent.Patent(title='Base station device, first location management device, terminal device, communication control method, and communication system',
+                              url='http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&u=%2Fnetahtml%2FPTO%2Fsearch-adv.htm&r=4&p=1&f=G&l=50&d=PTXT&S1=aaa&OS=aaa&RS=aaa')
+
+# Fetch the details
+this_patent.fetch_details()
+```
+
+### Patent Attributes Retrieved:
+
+*Note, not all fields from the patent page are scraped. I hope to add more, and pull requests are appreciated :)*
 
 * patent_num: Patent Number
 * patent_date: Issue Date
