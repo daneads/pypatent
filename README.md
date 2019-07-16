@@ -4,6 +4,21 @@ pypatent is a tiny Python package to easily search for and scrape US Patent and 
 
 [PyPI page](https://pypi.python.org/pypi/pypatent)
 
+#### New in version 1.2
+
+This version implements Selenium support for scraping.
+Previous versions were using the `requests` library for all requests, however this has had problems with the USPTO site lately.
+I notice some users have been able to use `requests` without issue, while others get 4xx errors.
+
+PyPatent Version 1.2 implements an optional new WebConnection object to give the user the option to use Selenium WebDrivers in place of the `requests` library.
+This WebConnection object is optional.
+If used, it should be passed as an argument when initializing `Search` or `Patent` objects.
+
+Use it in the following cases:
+* When you want to use Selenium instead of `requests`
+* When you want to use `requests` but with a custom user-agent or headers
+
+See bottom of README for examples.
 
 ## Requirements
 
