@@ -4,22 +4,35 @@ pypatent is a tiny Python package to easily search for and scrape US Patent and 
 
 [PyPI page](https://pypi.python.org/pypi/pypatent)
 
-*New in version 1.1:*
+#### New in version 1.2
 
-This version makes searching and storing patent data easier:
-* Simplified to 2 objects: `Search` and `Patent`
-* A `Search` object searches the USPTO site and can output the results as a DataFrame or list. It can scrape the details of each patent, or just get the patent title and URL. Most users will only need to use this object.
-* A `Patent` object fetches and holds a single patent's info. Fetching the patent's details is now optional. This object should only be used when you already have the patent URL and aren't conducting a search.
+This version implements Selenium support for scraping.
+Previous versions were using the `requests` library for all requests, however this has had problems with the USPTO site lately.
+I notice some users have been able to use `requests` without issue, while others get 4xx errors.
+
+PyPatent Version 1.2 implements an optional new WebConnection object to give the user the option to use Selenium WebDrivers in place of the `requests` library.
+This WebConnection object is optional.
+If used, it should be passed as an argument when initializing `Search` or `Patent` objects.
+
+Use it in the following cases:
+* When you want to use Selenium instead of `requests`
+* When you want to use `requests` but with a custom user-agent or headers
+
+See bottom of README for examples.
 
 ## Requirements
 
-Python 3, BeautifulSoup, requests, pandas, re
+Python 3, BeautifulSoup, requests, pandas, re, selenium
 
 ## Installation
 
 ```
 pip install pypatent
 ```
+
+If using Selenium for scraping (introduced in version 1.2), be sure to install a Selenium WebDriver.
+For Chrome, use `chromedriver`. For Firefox, use `geckodriver`.
+See [the Selenium download page](https://www.seleniumhq.org/download/) for more details and options.
 
 ## Searching for patents
 
@@ -191,3 +204,59 @@ this_patent.fetch_details()
 * ILRD: International Registration Date
 * ILPD: International Registration Publication Date
 * ILFD: Hague International Filing Date
+
+### Changelog
+#### New in version 1.2
+
+This version implements Selenium support for scraping.
+Previous versions were using the `requests` library for all requests, however the USPTO site has been causing problems for it.
+I notice some users have been able to use `requests` without issue, while others get 4xx errors.
+
+PyPatent Version 1.2 implements a new WebConnection object to give the user the option to use Selenium WebDrivers in place of the `requests` library.
+This WebConnection object is optional.
+If used, it should be passed as an argument when initializing `Search` or `Patent` objects.
+Use it in the following cases:
+* When you want to use Selenium instead of `requests`
+* When you want to use `requests` but with a custom user-agent or headers
+
+An example using the Firefox WebDriver:
+
+```python
+import pypatent
+from selenium import webdriver
+
+driver = webdriver.Firefox()  # Requires geckodriver in your PATH
+
+conn = pypatent.WebConnection(use_selenium=True, selenium_driver=driver)
+
+res = pypatent.Search('microsoft', get_patent_details=True, web_connection=conn)
+
+print(res)
+```
+
+An example using the `requests` library with a custom user agent:
+```python
+import pypatent
+
+conn = pypatent.WebConnection(use_selenium=False, user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36')
+
+res = pypatent.Search('microsoft', get_patent_details=True, web_connection=conn)
+
+print(res)
+```
+
+An example using the `requests` library with default user agent (WebConnection is not necessary here as we are using the defaults)
+```python
+import pypatent
+
+res = pypatent.Search('microsoft', get_patent_details=True)
+
+print(res)
+```
+
+#### New in version 1.1:
+
+This version makes searching and storing patent data easier:
+* Simplified to 2 objects: `Search` and `Patent`
+* A `Search` object searches the USPTO site and can output the results as a DataFrame or list. It can scrape the details of each patent, or just get the patent title and URL. Most users will only need to use this object.
+* A `Patent` object fetches and holds a single patent's info. Fetching the patent's details is now optional. This object should only be used when you already have the patent URL and aren't conducting a search.
